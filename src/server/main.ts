@@ -1,8 +1,9 @@
 import express from "express";
 import ViteExpress from "vite-express";
+import { config } from "dotenv";
 
 
-
+config();
 
 
 
