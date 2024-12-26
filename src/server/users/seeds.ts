@@ -2,24 +2,25 @@ import { Client } from "pg";
 
 const schemaName = 'public';
 
-export async function createTableProperties(client: Client) {
+export async function createTableUsers(client: Client) {
   try {
     await client.query(`
-      CREATE TABLE IF NOT EXISTS ${schemaName}.properties (
+      CREATE TABLE IF NOT EXISTS ${schemaName}.users (
         id SERIAL PRIMARY KEY,
-        owner_id INTEGER NOT NULL REFERENCES ${schemaName}.users(id) ON DELETE CASCADE,
-        title VARCHAR(255) NOT NULL,
-        description TEXT,
-        price NUMERIC(10, 2),
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
         location VARCHAR(255),
-        photos JSONB,
-        status VARCHAR(255) DEFAULT 'available',
+        preferences JSONB,
+        photo VARCHAR(255),
+        status VARCHAR(255),
+        admin BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log("Table 'properties' created successfully.");
+    console.log("Table 'users' created successfully.");
   } catch (err) {
-    console.error("Error creating 'properties' table:", err);
+    console.error("Error creating 'users' table:", err);
   }
 }

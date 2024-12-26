@@ -19,6 +19,15 @@ userRouter.get("/:id", authenticateToken, async(req, res) => {
     }
   });
 
+  userRouter.get("/", async (_, res) => {
+    try {
+      const users = await new UserPgRepository().getAll();
+      res.json(users);
+    } catch (error) {
+      res.status(500).send({ status: 500, error: "Internal server error" });
+    }
+  });
+
   userRouter.put("/:id", authenticateToken, async (req, res) => {
     const { id, name, email, password, status } = req.body;
     
