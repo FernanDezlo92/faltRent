@@ -15,7 +15,7 @@ export async function getUsers() {
 }
 
 export async function createUser(user: User) {
-    const apiUrl = '/api/auth/register';
+    const apiUrl = `${API_URL}/api/auth/register`;
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',

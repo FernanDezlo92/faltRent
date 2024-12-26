@@ -1,30 +1,41 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
-import { authenticateUser } from '../api/userApi';
+import { createUser } from '../api/userApi';
 
-export default function SignInScreen({ navigation }) {
+export default function SignUpScreen({ navigation }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
 
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
+    const user = { name, email, password, status: 'active'};
     try {
-      const response = await authenticateUser(email, password);
+      const response = await createUser(user);
 
       if (response) {
         const { data } = response;
-        Alert.alert('Inicio de sesión exitoso', `Bienvenido, ${data.name}`);
+        Alert.alert('Usuario creado', `Usuario ${data.name} creado con éxito`);
+        navigation.navigate('SignIn', { email: data.email, name: data.name });
       }
     } catch (error) {
-      Alert.alert('Error', 'Correo o contraseña incorrectos');
+      Alert.alert('Error', 'Correo o contraseña no validos');
     }
   };
   
   
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Inicia sesión</Text>
+      <Text style={styles.title}>Crear cuenta</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
 
       <TextInput
         style={styles.input}
@@ -43,14 +54,14 @@ export default function SignInScreen({ navigation }) {
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Iniciar sesión</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Crear cuenta</Text>
       </TouchableOpacity>
 
       <Text style={styles.registerText}>
-        ¿Aún no eres miembro?{' '}
-        <Text style={styles.registerLink} onPress={() => navigation.navigate('SignUp')}>
-          Regístrate
+        ¿Eres miembro?{' '}
+        <Text style={styles.registerLink} onPress={() => navigation.navigate('SignIn')}>
+         Inicia sesión
         </Text>
       </Text>
     </View>

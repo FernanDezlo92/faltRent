@@ -8,8 +8,7 @@ const ENV = {
   };
   
   const API_URL = () => {
-    const releaseChannel = 'development';
-    return ENV[releaseChannel] || ENV.development;
+    return ENV.development.API_URL;
   };
   
   export default API_URL();
