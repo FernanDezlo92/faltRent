@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { getUserPreferences } from '../api/userPreferenceApi';
 import { useRoute } from '@react-navigation/native';
 import User from '../../../server/users/entity';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
+import OwnerSettings from '../components/OwnerSettings';
+import SeekerSettings from '../components/SeekerSettings';
+import * as Location from 'expo-location';
 
 const Settings = () => {
     const [role, setRole] = useState('');
     const [location, setLocation] = useState('');
-    const [searchRange, setSearchRange] = useState(10);
+    const [gpsLocation, setGpsLocation] = useState('');
+    const [searchRange, setSearchRange] = useState('');
+    const [pets, setPets] = useState('');
     const route = useRoute();
     const { user } = route.params as { user: User };
 
@@ -19,19 +23,38 @@ const Settings = () => {
             if (data) {
                 setRole(data.role || '');
                 setLocation(data.location || '');
-                setSearchRange(data.search_range || 10);
+                setSearchRange(data.search_range || '');
             }
         };
+
+        const fetchLocation = async () => {
+            try {
+                const { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== 'granted') {
+                    Alert.alert('Permiso denegado', 'Se necesita acceso a la ubicación para continuar.');
+                    return;
+                }
+
+                const loc = await Location.getCurrentPositionAsync({});
+                setGpsLocation(`${loc.coords.latitude}, ${loc.coords.longitude}`);
+            } catch (error) {
+                Alert.alert('Error', 'No se pudo obtener la ubicación del dispositivo.');
+            }
+        };
+
         fetchPreferences();
+        fetchLocation();
     }, [user]);
 
     const handleSave = async () => {
-        alert('Preferencias guardadas');
+        const finalLocation = location || gpsLocation;
+        alert(`Preferencias guardadas: Rol: ${role}, Ubicación: ${finalLocation}, Rango: ${searchRange}`);
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Configuración Inicial</Text>
+
             <Picker
                 selectedValue={role}
                 onValueChange={(value) => setRole(value)}
@@ -41,19 +64,28 @@ const Settings = () => {
                 <Picker.Item label="Propietario" value="propietario" />
                 <Picker.Item label="Buscador" value="buscador" />
             </Picker>
-            <TextInput
-                style={styles.input}
-                placeholder="Introduce tu ubicación"
-                value={location}
-                onChangeText={setLocation}
-            />
-            <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                placeholder="Rango de búsqueda (km)"
-                value={String(searchRange)}
-                onChangeText={(text) => setSearchRange(Number(text))}
-            />
+
+            {role === 'propietario' && (
+                <OwnerSettings
+                    location={location}
+                    setLocation={setLocation}
+                    searchRange={searchRange}
+                    setSearchRange={setSearchRange}
+                    pets={pets}
+                    setPets={setPets}
+                />
+            )}
+            {role === 'buscador' && (
+                <SeekerSettings
+                    location={location}
+                    setLocation={setLocation}
+                    searchRange={searchRange}
+                    setSearchRange={setSearchRange}
+                    pets={pets}
+                    setPets={setPets}
+                />
+            )}
+
             <Button title="Guardar" onPress={handleSave} />
         </View>
     );

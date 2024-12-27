@@ -13,7 +13,7 @@ class UsersPreferencesPgRepository implements UsersPreferencesRepository {
     async getByUserId(userId: number) {
         const query = `
             SELECT role, location, search_range
-            FROM preferences
+            FROM users_preferences
             WHERE user_id = $1
         `;
         const { rows } = await pool.query(query, [userId]);
