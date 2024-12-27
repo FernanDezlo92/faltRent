@@ -10,10 +10,11 @@ export default function SignInScreen({ navigation }) {
   const handleLogin = async () => {
     try {
       const response = await authenticateUser(email, password);
-
       if (response) {
         const { data } = response;
-        Alert.alert('Inicio de sesión exitoso', `Bienvenido, ${data.name}`);
+        if (data) {
+          navigation.navigate('Settings', { user: data });
+        }
       }
     } catch (error) {
       Alert.alert('Error', 'Correo o contraseña incorrectos');

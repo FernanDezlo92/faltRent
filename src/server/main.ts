@@ -5,7 +5,7 @@ import auth from "./auth/controller";
 // import { authenticateToken } from "./middlewares/authenticateToken";
 import userRouter from "./users/controllers";
 import { setUpDatabase } from "./setUpDataBase";
-
+import userPreferenceRouter from "./UsersPreferences/controller";
 
 config();
 
@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", auth); 
 app.use("/api/users", userRouter);
+app.use("/api/user-preferences", userPreferenceRouter);
 
 
 ViteExpress.listen(app, 3000, async() =>

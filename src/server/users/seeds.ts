@@ -11,7 +11,6 @@ export async function createTableUsers(client: Client) {
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
         location VARCHAR(255),
-        preferences JSONB,
         photo VARCHAR(255),
         status VARCHAR(255),
         admin BOOLEAN DEFAULT FALSE,
