@@ -14,4 +14,14 @@ userPreferenceRouter.get("/:id", async(req, res) => {
     }
 });
 
+userPreferenceRouter.post("/", async(req, res) => {
+    const userPreference = req.body;
+    try {
+      const newUserPreference = await new UsersPreferencesPgRepository().create(userPreference);
+      res.json(newUserPreference);
+    } catch (error) {
+      res.status(500).send({ status: 500, error: "Internal server error" });
+    }
+});
+
 export default userPreferenceRouter;

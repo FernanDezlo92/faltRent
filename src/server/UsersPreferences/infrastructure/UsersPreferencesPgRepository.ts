@@ -1,6 +1,6 @@
 import pool from "../../bbdd";
 import  UsersPreferencesRepository from "../repository";
-import  UsersPreferences  from "../entity";
+import  UsersPreferences  from "../../../server/usersPreferences/entity";
 
 
 class UsersPreferencesPgRepository implements UsersPreferencesRepository {
@@ -22,8 +22,9 @@ class UsersPreferencesPgRepository implements UsersPreferencesRepository {
 
     async create(userPreference: UsersPreferences): Promise<UsersPreferences> {
         const user = await pool.query(
-            "INSERT INTO users_preferences (user_id) VALUES ($1) RETURNING *",
-            [userPreference.user_id]
+            "INSERT INTO users_preferences (user_id, role, location, search_range, latitude, longitude, number_rooms, pets) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+            [userPreference.user_id, userPreference.role, userPreference.location, userPreference.search_range, userPreference.latitude, userPreference.longitude,
+            userPreference.number_rooms, userPreference.pets]
         );
         return user.rows[0];
     }

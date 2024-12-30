@@ -12,6 +12,10 @@ export async function createTableUsersPreferences(client: Client) {
         role VARCHAR(50) CHECK (role IN ('propietario', 'buscador')) NOT NULL,
         location VARCHAR(255),
         search_range INT DEFAULT 10,
+        latitude FLOAT,
+        longitude FLOAT,
+        number_rooms INT,
+        pets VARCHAR(50) CHECK (pets IN ('si', 'no')),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
