@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import SignUpScreen from '../users/views/signupForm';
 import SignInScreen from '../users/views/signinForm';
 import Settings from '../usersPreferences/views/Settings';
-
+import Dashboard from '../dashboard/views/Dashboard';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +25,11 @@ export default function RootNavigator() {
         <Stack.Screen
           name="Settings"
           component={Settings}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="dashboard"
+          component={Dashboard}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

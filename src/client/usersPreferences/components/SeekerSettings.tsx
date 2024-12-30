@@ -9,18 +9,14 @@ interface SeekerSettingsProps {
     setSearchRange: (value: string) => void;
     pets: string;
     setPets: (value: string) => void;
+    numberRooms: string;
+    setNumberRooms: (value: string) => void;
 }
 
-const SeekerSettings: React.FC<SeekerSettingsProps> = ({ location, setLocation, searchRange, setSearchRange, pets, setPets }) => {
+const SeekerSettings: React.FC<SeekerSettingsProps> = ({ location, setLocation, searchRange, setSearchRange, pets, setPets, numberRooms, setNumberRooms }) => {
     return (
         <View>
-            <Text style={styles.subtitle}>Preferencias del Buscador</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Ubicación (GPS o manual)"
-                value={location}
-                onChangeText={(value) => setLocation(value)}
-            />
+            <Text style={styles.subtitle}>Configuración del Buscador</Text>
             <Picker
                 selectedValue={location}
                 onValueChange={(value) => setLocation(value)}
@@ -33,6 +29,13 @@ const SeekerSettings: React.FC<SeekerSettingsProps> = ({ location, setLocation, 
                 style={styles.input}
                 keyboardType="numeric"
                 placeholder="Número de habitaciones que busca"
+                value={String(numberRooms)}
+                onChangeText={(text) => setNumberRooms(String(text))}
+            />
+            <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="Rango de búsqueda (km)"
                 value={String(searchRange)}
                 onChangeText={(text) => setSearchRange(String(text))}
             />

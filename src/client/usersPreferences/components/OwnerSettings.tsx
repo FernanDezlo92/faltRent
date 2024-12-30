@@ -5,13 +5,13 @@ import { Picker } from '@react-native-picker/picker';
 interface OwnerSettingsProps {
     location: string;
     setLocation: (value: string) => void;
-    searchRange: string;
-    setSearchRange: (value: string) => void;
     pets: string;
     setPets: (value: string) => void;
+    numberRooms: string;
+    setNumberRooms: (value: string) => void;
 }
 
-const OwnerSettings: React.FC<OwnerSettingsProps> = ({ location, setLocation, searchRange, setSearchRange, pets, setPets }) => {
+const OwnerSettings: React.FC<OwnerSettingsProps> = ({ location, setLocation, pets, setPets, numberRooms, setNumberRooms }) => {
     return (
         <View>
             <Text style={styles.subtitle}>Configuración de Propietario</Text>
@@ -28,8 +28,8 @@ const OwnerSettings: React.FC<OwnerSettingsProps> = ({ location, setLocation, se
                 style={styles.input}
                 keyboardType="numeric"
                 placeholder="Número de habitaciones"
-                value={String(searchRange)}
-                onChangeText={(text) => setSearchRange(String(text))}
+                value={String(numberRooms)}
+                onChangeText={(text) => setNumberRooms(String(text))}
             />
             <Picker
                 selectedValue={pets}
